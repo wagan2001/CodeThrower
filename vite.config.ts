@@ -12,6 +12,7 @@ export default defineConfig({
   build: {
     target: "es2020",
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
-    sourcemap: Boolean(process.env.TAURI_DEBUG)
+    sourcemap: Boolean(process.env.TAURI_DEBUG),
+    chunkSizeWarningLimit: 4000
   }
 });

@@ -36,6 +36,32 @@ npm run build
 The default Ollama endpoint is `http://localhost:11434` and the default model is
 `qwen2.5-coder:7b-instruct`.
 
+Pull the recommended development model before using the app:
+
+```bash
+ollama pull qwen2.5-coder:7b-instruct
+```
+
+If the browser or Tauri webview cannot reach Ollama, allow the local app origin:
+
+```bash
+$env:OLLAMA_ORIGINS="http://localhost:1420,tauri://localhost"
+ollama serve
+```
+
+## Current MVP Features
+
+- Ollama health check and editable runtime settings.
+- Schema-driven problem generation with one JSON repair retry.
+- Monaco editor with language-aware syntax modes.
+- Progressive three-step hint ladder.
+- LLM-only rubric grading for correctness, edge cases, quality, and complexity.
+- Similar, easier, and harder follow-up rep generation.
+- JSON session history stored in local browser/Tauri storage.
+- Session reload, history clear, and history export.
+
+Code execution is intentionally not included in this version.
+
 ## Desktop Shell
 
 The repository includes Tauri 2 configuration in `src-tauri/`. A Rust toolchain
