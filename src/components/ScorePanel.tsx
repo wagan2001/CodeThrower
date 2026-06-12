@@ -1,4 +1,4 @@
-import { Gauge, Target } from "lucide-react";
+import { BadgeCheck, Bug, Gauge, OctagonX, Sparkles, Target, Trophy } from "lucide-react";
 import type { ScoreReport } from "../lib/types";
 
 type Props = {
@@ -20,14 +20,35 @@ export function ScorePanel({ report }: Props) {
     );
   }
 
+  const result = getScoreResult(report);
+  const IssueIcon = result.kind === "fail" ? OctagonX : result.kind === "high" ? Trophy : BadgeCheck;
+  const bugCount = report.majorIssues.length + report.minorIssues.length;
+
   return (
-    <section className="score-panel" aria-label="Score report">
+    <section className={`score-panel score-state-${result.kind}`} aria-label="Score report">
       <div className="score-header">
         <div>
           <h2>Score report</h2>
           <p>Overall score</p>
         </div>
-        <strong>{report.score}/100</strong>
+        <strong className="score-value">{report.score}/100</strong>
+      </div>
+
+      <div className="score-outcome" role="status" aria-live="polite">
+        <div className="score-outcome-icon">
+          <IssueIcon size={20} aria-hidden="true" />
+        </div>
+        <div>
+          <strong>{result.label}</strong>
+          <p>{result.message}</p>
+        </div>
+        {result.kind === "high" && <Sparkles className="score-spark score-spark-a" size={16} aria-hidden="true" />}
+        {result.kind === "high" && <Sparkles className="score-spark score-spark-b" size={13} aria-hidden="true" />}
+      </div>
+
+      <div className={bugCount > 0 ? "bug-meter has-bugs" : "bug-meter"}>
+        <Bug size={18} aria-hidden="true" />
+        <span>{bugCount > 0 ? `${bugCount} code issue${bugCount === 1 ? "" : "s"} flagged` : "No code issues flagged"}</span>
       </div>
 
       <div className="score-grid">
@@ -81,4 +102,28 @@ function FeedbackList({ title, items }: { title: string; items: string[] }) {
       </ul>
     </div>
   );
+}
+
+function getScoreResult(report: ScoreReport) {
+  if (report.score >= 90) {
+    return {
+      kind: "high" as const,
+      label: "High score",
+      message: "Strong pass. You handled the core task and most edge pressure."
+    };
+  }
+
+  if (report.score >= 70) {
+    return {
+      kind: "pass" as const,
+      label: "Pass",
+      message: "Solid attempt. Clean up the flagged issues to push this higher."
+    };
+  }
+
+  return {
+    kind: "fail" as const,
+    label: "Needs repair",
+    message: "The submission missed enough requirements that another pass is worth it."
+  };
 }
