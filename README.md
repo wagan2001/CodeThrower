@@ -27,6 +27,12 @@ Start the frontend:
 npm run dev
 ```
 
+Open the app:
+
+```text
+http://127.0.0.1:1420
+```
+
 Build the frontend:
 
 ```bash
@@ -45,7 +51,7 @@ ollama pull qwen2.5-coder:7b-instruct
 If the browser or Tauri webview cannot reach Ollama, allow the local app origin:
 
 ```bash
-$env:OLLAMA_ORIGINS="http://localhost:1420,tauri://localhost"
+$env:OLLAMA_ORIGINS="http://127.0.0.1:1420,http://localhost:1420,tauri://localhost"
 ollama serve
 ```
 
